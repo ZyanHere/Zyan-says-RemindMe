@@ -1,4 +1,8 @@
+import CreateCollectionBtn from "@/components/CreateCollectionBtn";
+import SadFace from "@/components/icons/SadFace";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import { prisma } from "@/lib/prisma";
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { Suspense } from "react";
@@ -9,6 +13,9 @@ export default async function  Home() {
     <>
       <Suspense fallback={<WelcomeMsgFallback />}>
         <WelcomMsg />
+      </Suspense>
+      <Suspense fallback={<div>Loading collections...</div>}>
+        <CollectionList />
       </Suspense>
     </>
   );
@@ -40,4 +47,32 @@ function WelcomeMsgFallback() {
       </h1>
     </div>
   );
+}
+
+async function CollectionList() {
+  const user = await currentUser();
+  const collections = await prisma.collection.findMany({
+    // include: {
+    //   tasks: true,
+    // },
+    where: {
+      userId: user?.id,
+    },
+  });
+
+  if (collections.length === 0) {
+    return (
+      <div className="flex flex-col gap-5">
+        <Alert>
+          <SadFace />
+          <AlertTitle>There are no collections yet!</AlertTitle>
+          <AlertDescription>
+            Create a collection to get started
+          </AlertDescription>
+        </Alert>
+        <CreateCollectionBtn />
+      </div>
+    );
+  }
+  
 }
