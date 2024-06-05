@@ -1,5 +1,5 @@
 "use client";
-import { Collection, Task } from "@prisma/client";
+import { Collection } from "@prisma/client";
 import React, { useMemo, useState, useTransition } from "react";
 import {
   Collapsible,
@@ -28,7 +28,6 @@ import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import CreateTaskDialog from "./CreateTaskDialog";
 import TaskCard from "./TaskCard";
-
 
 interface Props {
   collection: Collection & {

@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { createTaskSchemaType } from "@/schema/createTask";
 import { currentUser } from "@clerk/nextjs/server";
 
-
 export async function createTask(data: createTaskSchemaType){
     const user = await currentUser();
 

@@ -1,4 +1,3 @@
-
 "use client";
 import { Collection } from "@prisma/client";
 import React from "react";
@@ -13,6 +12,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import { CollectionColor, CollectionColors } from "@/lib/constants";
 import { useForm } from "react-hook-form";
+import { createTaskSchema, createTaskSchemaType } from "@/schema/createTask";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -32,7 +32,6 @@ import { format } from "date-fns";
 import { createTask } from "@/actions/task";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
-import { createTaskSchema, createTaskSchemaType } from "@/schema/createTask";
 
 interface Props {
   open: boolean;
