@@ -33,10 +33,10 @@ import { CollectionColor, CollectionColors } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
+import { createCollection } from "@/actions/collection";
 import { toast } from "./ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { createCollection } from "@/actions/collection";
 
 interface Props {
   open: boolean;

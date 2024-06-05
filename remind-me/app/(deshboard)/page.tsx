@@ -4,12 +4,10 @@ import SadFace from "@/components/icons/SadFace";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/lib/prisma";
-import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { Suspense } from "react";
 
-export default async function  Home() {
-  
+export default async function Home() {
   return (
     <>
       <Suspense fallback={<WelcomeMsgFallback />}>
@@ -21,7 +19,6 @@ export default async function  Home() {
     </>
   );
 }
-
 
 async function WelcomMsg() {
   const user = await currentUser();
@@ -53,9 +50,9 @@ function WelcomeMsgFallback() {
 async function CollectionList() {
   const user = await currentUser();
   const collections = await prisma.collection.findMany({
-    // include: {
-    //   tasks: true,
-    // },
+    include: {
+      tasks: true,
+    },
     where: {
       userId: user?.id,
     },
@@ -75,6 +72,7 @@ async function CollectionList() {
       </div>
     );
   }
+
   return (
     <>
       <CreateCollectionBtn />

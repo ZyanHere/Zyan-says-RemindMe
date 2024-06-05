@@ -1,5 +1,5 @@
 "use client";
-import { Collection } from "@prisma/client";
+import { Collection, Task } from "@prisma/client";
 import React, { useMemo, useState, useTransition } from "react";
 import {
   Collapsible,
@@ -26,10 +26,13 @@ import {
 import { deleteCollection } from "@/actions/collection";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
+import CreateTaskDialog from "./CreateTaskDialog";
+import TaskCard from "./TaskCard";
 
 
 interface Props {
   collection: Collection & {
+    tasks: Task[];
   };
 }
 
@@ -39,7 +42,7 @@ function CollectionCard({ collection }: Props) {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const tasks = []
+  const tasks = collection.tasks;
 
   const [isLoading, startTransition] = useTransition();
 
@@ -60,10 +63,22 @@ function CollectionCard({ collection }: Props) {
     }
   };
 
+  const tasksDone = useMemo(() => {
+    return collection.tasks.filter((task) => task.done).length;
+  }, [collection.tasks]);
 
+  const totalTasks = collection.tasks.length;
+
+  const progress = totalTasks === 0 ? 0 : (tasksDone / totalTasks) * 100;
 
   return (
     <>
+      <CreateTaskDialog
+        open={showCreateModal}
+        setOpen={setShowCreateModal}
+        collection={collection}
+      />
+
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -99,10 +114,10 @@ function CollectionCard({ collection }: Props) {
           )}
           {tasks.length > 0 && (
             <>
-              <Progress className="rounded-none" value={45} />
+              <Progress className="rounded-none" value={progress} />
               <div className="p-4 gap-3 flex flex-col">
                 {tasks.map((task) => (
-                  <div>test</div>
+                  <TaskCard key={task.id} task={task} />
                 ))}
               </div>
             </>
